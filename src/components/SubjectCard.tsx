@@ -25,7 +25,7 @@ export function SubjectCard({ subject, onEdit, onDelete }: SubjectCardProps) {
         '&:hover': { transform: 'translateY(-2px)', boxShadow: 3 },
         borderLeft: `4px solid ${subject.color}`
       }}
-      onClick={() => navigate(`/subject/${subject.id}/students')}
+      onClick={() => navigate(`/subject/${subject.id}/students`)}
     >
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
