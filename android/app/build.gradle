@@ -1,0 +1,101 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.example.attendanceapp'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.attendanceapp"
+        minSdk 23
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    signingConfigs {
+        release {
+            // Configuración para firmar en CI/CD
+            // Las credenciales vienen de variables de entorno en GitHub Actions
+            if (System.getenv('KEYSTORE_BASE64') != null) {
+                def keystoreBytes = Base64.getDecoder().decode(System.getenv('KEYSTORE_BASE64'))
+                def keystoreFile = file("$buildDir/keystore.jks")
+                keystoreFile.write(keystoreBytes)
+                storeFile keystoreFile
+                storePassword System.getenv('KEYSTORE_PASSWORD')
+                keyAlias System.getenv('KEY_ALIAS')
+                keyPassword System.getenv('KEY_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE,NOTICE}"
+        }
+    }
+}
+
+dependencies {
+    // Capacitor
+    implementation 'com.getcapacitor:capacitor-android:6.1.2'
+    implementation 'com.getcapacitor:capacitor-core:6.1.2'
+
+    // AndroidX
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.activity:activity-ktx:1.8.2'
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+    implementation 'com.google.android.material:material:1.11.0'
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:32.7.4')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
+    // Capacitor Plugins
+    implementation 'com.capacitorjs:push-notifications:6.0.0'
+    implementation 'com.capacitorjs:local-notifications:6.0.0'
+    implementation 'com.capacitorjs:firebase-authentication:6.0.0'
+    implementation 'com.capacitorjs:splash-screen:6.0.0'
+    implementation 'com.capacitorjs:status-bar:6.0.0'
+
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
