@@ -47,7 +47,12 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
         with:
-          packages: 'platforms;android-${{ env.ANDROID_SDK_VERSION }},build-tools;34.0.0,platform-tools,cmdline-tools;latest'
+          packages: |
+            platforms;android-34
+            build-tools;34.0.0
+            platform-tools
+            cmdline-tools;latest
+          accept-android-sdk-licenses: true
 
       # 5. Cache Gradle
       - name: Cache Gradle packages
