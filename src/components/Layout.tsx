@@ -49,15 +49,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600 }}>Lista de Clase</Typography>
           {user && <Tooltip title={user.isAnonymous ? 'Invitado' : user.email || 'Usuario'}><IconButton onClick={handleMenuOpen}><Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main', color: 'primary.contrastText' }}>{user.displayName?.[0] || user.email?.[0] || 'U'}</Avatar></IconButton></Tooltip>}
-        </AppBar>
-        <Drawer variant="permanent" sx={{ drawer: { width: 280, flexShrink: 0 }, paper: { width: 280, boxSizing: 'border-box', borderRight: 1, borderColor: 'divider', height: '100vh', position: 'sticky', top: 0 } }}>
-          <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}><Typography variant="h6" fontWeight={600}>Lista de Clase</Typography></Box>
-          <List>{navItems.map(item => <ListItem button key={item.path} selected={location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path))} onClick={() => navigate(item.path)} sx={{ borderRadius: 0, mx: 1, my: 0.5 }}><ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon><ListItemText primary={item.label} /></ListItem>)}</List>
-          <Divider /><Box sx={{ p: 2 }}><Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>Usuario: {user?.isAnonymous ? 'Invitado' : user?.email || 'Anónimo'}</Typography><ListItem button onClick={handleLogout} sx={{ px: 0 }}><ListItemIcon><Logout /></ListItemIcon><ListItemText primary="Cerrar sesión" /></ListItem></Box>
-        </Drawer>
-        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: '64px', ml: { md: '280px' }, minHeight: '100vh' }}>{children}</Box>
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose} transformOrigin={{ horizontal: 'right', vertical: 'top' }} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}><MenuItem onClick={handleLogout}><Logout fontSize="small" /> Cerrar sesión</MenuItem></Menu>
-      </Box>
+        </Toolbar>
+      </AppBar>
+      <Drawer variant="permanent" sx={{ drawer: { width: 280, flexShrink: 0 }, paper: { width: 280, boxSizing: 'border-box', borderRight: 1, borderColor: 'divider', height: '100vh', position: 'sticky', top: 0 } }}>
+        <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}><Typography variant="h6" fontWeight={600}>Lista de Clase</Typography></Box>
+        <List>{navItems.map(item => <ListItem button key={item.path} selected={location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path))} onClick={() => navigate(item.path)} sx={{ borderRadius: 0, mx: 1, my: 0.5 }}><ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon><ListItemText primary={item.label} /></ListItem>)}</List>
+        <Divider /><Box sx={{ p: 2 }}><Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>Usuario: {user?.isAnonymous ? 'Invitado' : user?.email || 'Anónimo'}</Typography><ListItem button onClick={handleLogout} sx={{ px: 0 }}><ListItemIcon><Logout /></ListItemIcon><ListItemText primary="Cerrar sesión" /></ListItem></Box>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: '64px', ml: { md: '280px' }, minHeight: '100vh' }}>{children}</Box>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose} transformOrigin={{ horizontal: 'right', vertical: 'top' }} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}><MenuItem onClick={handleLogout}><Logout fontSize="small" /> Cerrar sesión</MenuItem></Menu>
     </Box>
+  );
   );
 }
