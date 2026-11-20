@@ -43,16 +43,19 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      # 4. Setup Android SDK
+      # 4. Setup Android SDK (manual)
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v4
-        with:
-          packages: |
-            platforms;android-34
-            build-tools;34.0.0
-            platform-tools
-            cmdline-tools;latest
-          accept-android-sdk-licenses: true
+        run: |
+          # Accept licenses
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+          # Install required packages
+          /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+            "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "platform-tools" \
+            "cmdline-tools;latest"
+        env:
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
 
       # 5. Cache Gradle
       - name: Cache Gradle packages
