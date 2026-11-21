@@ -46,15 +46,26 @@ export function BehaviorPage() {
         <List disablePadding>
           {students.map((student, index) => {
             const grade = getStudentGrade(student.id);
+            const totalPoints = grade?.totalPoints ?? 0;
+            const pointsLabel = totalPoints > 0 ? '+' + totalPoints : String(totalPoints);
+            const avatarBg = grade 
+              ? (grade.finalGrade >= 7 ? 'success.main' : grade.finalGrade >= 5 ? 'warning.main' : 'error.main')
+              : 'default.main';
             return (
               <React.Fragment key={student.id}>
                 <ListItem sx={{ px: 2, py: 1, cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }} onClick={() => setDialogOpen(true)} secondaryAction={<IconButton edge="end" onClick={e => { e.stopPropagation(); navigate(`/subject/${subjectId}/behavior/${student.id}`); }}><Visibility /></IconButton>}>
                   <ListItemAvatar>
-                    <Avatar sx={{ bgcolor: grade ? (grade.finalGrade >= 7 ? 'success.main' : grade.finalGrade >= 5 ? 'warning.main' : 'error.main') : 'default.main' }}>
+                    <Avatar sx={{ bgcolor: avatarBg }}>
                       {grade ? grade.finalGrade.toFixed(1) : '—'}
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={<Typography variant="subtitle1" fontWeight={600}>{student.firstName} {student.lastName}</Typography)} secondary={<Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 0.5 }}><Chip label={`${grade?.positiveCount || 0} +`} icon={<ThumbUp fontSize="small" />} color="success" size="small" variant="outlined" /><Chip label={`${grade?.negativeCount || 0} -`} icon={<ThumbDown fontSize="small" />} color="error" size="small" variant="outlined" /><Chip label={((grade?.totalPoints ?? 0) > 0 ? '+' : '') + `${grade?.totalPoints || 0}`} size="small" variant="outlined" /></Box>} />
+                  <ListItemText primary={<Typography variant="subtitle1" fontWeight={600}>{student.firstName} {student.lastName}</Typography>} secondary={
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 0.5 }}>
+                      <Chip label={`${grade?.positiveCount || 0} +`} icon={<ThumbUp fontSize="small" />} color="success" size="small" variant="outlined" />
+                      <Chip label={`${grade?.negativeCount || 0} -`} icon={<ThumbDown fontSize="small" />} color="error" size="small" variant="outlined" />
+                      <Chip label={pointsLabel} size="small" variant="outlined" />
+                    </Box>
+                  } />
                   <ListItemSecondaryAction><Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>{grade && <Typography variant="h6" fontWeight={700} sx={{ color: grade.finalGrade >= 7 ? 'success.main' : grade.finalGrade >= 5 ? 'warning.main' : 'error.main', minWidth: 50 }}>{grade.finalGrade.toFixed(1)}</Typography>}</Box></ListItemSecondaryAction>
                 </ListItem>
                 {index < students.length - 1 && <Divider variant="inset" component="li" />}

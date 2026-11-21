@@ -50,7 +50,10 @@ export function BehaviorDetailPage() {
         </Box>
         {records.length === 0 ? <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center', display: 'block' }}>Sin registros</Typography> : (
           <List disablePadding>
-            {records.map((record, index) => (
+            {records.map((record, index) => {
+              const points = record.points ?? 0;
+              const pointsLabel = points > 0 ? '+' + points : String(points);
+              return (
               <React.Fragment key={record.id}>
                 <ListItem sx={{ px: 2, py: 1, cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }} onClick={() => setDeleteConfirm(record)} secondaryAction={<IconButton edge="end" onClick={e => { e.stopPropagation(); setDeleteConfirm(record); }}><Delete color="error" /></IconButton>}>
                   <ListItemAvatar>
@@ -58,7 +61,7 @@ export function BehaviorDetailPage() {
                       {record.type === 'positive' ? <ThumbUp fontSize="small" color="success.main" /> : <ThumbDown fontSize="small" color="error.main" />}
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={<Typography variant="subtitle1" fontWeight={600}>{record.category}</Typography)} secondary={<Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 0.5 }}><Chip label={record.type === 'positive' ? '✓ Positivo' : '✗ Negativo'} size="small" color={record.type === 'positive' ? 'success' : 'error'} variant="outlined" /><Chip label={((record.points ?? 0) > 0 ? '+' : '') + `${record.points}`} size="small" variant="outlined" /><Typography variant="caption" color="text.secondary">{formatDate(record.date)}</Typography></Box>} />
+                  <ListItemText primary={<Typography variant="subtitle1" fontWeight={600}>{record.category}</Typography)} secondary={<Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 0.5 }}><Chip label={record.type === 'positive' ? '✓ Positivo' : '✗ Negativo'} size="small" color={record.type === 'positive' ? 'success' : 'error'} variant="outlined" /><Chip label={pointsLabel} size="small" variant="outlined" /><Typography variant="caption" color="text.secondary">{formatDate(record.date)}</Typography></Box>} />
                 </ListItem>
                 {index < records.length - 1 && <Divider variant="inset" component="li" />}
               </React.Fragment>
