@@ -58,7 +58,7 @@ export function BehaviorDetailPage() {
                       {record.type === 'positive' ? <ThumbUp fontSize="small" color="success.main" /> : <ThumbDown fontSize="small" color="error.main" />}
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={<Typography variant="subtitle1" fontWeight={600}>{record.category}</Typography)} secondary={<Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 0.5 }}><Chip label={record.type === 'positive' ? '✓ Positivo' : '✗ Negativo'} size="small" color={record.type === 'positive' ? 'success' : 'error'} variant="outlined" /><Chip label={`${(record.points ?? 0) > 0 ? '+' : ''}${record.points}`} size="small" variant="outlined" /><Typography variant="caption" color="text.secondary">{formatDate(record.date)}</Typography></Box>} />
+                  <ListItemText primary={<Typography variant="subtitle1" fontWeight={600}>{record.category}</Typography)} secondary={<Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 0.5 }}><Chip label={record.type === 'positive' ? '✓ Positivo' : '✗ Negativo'} size="small" color={record.type === 'positive' ? 'success' : 'error'} variant="outlined" /><Chip label={((record.points ?? 0) > 0 ? '+' : '') + `${record.points}`} size="small" variant="outlined" /><Typography variant="caption" color="text.secondary">{formatDate(record.date)}</Typography></Box>} />
                 </ListItem>
                 {index < records.length - 1 && <Divider variant="inset" component="li" />}
               </React.Fragment>

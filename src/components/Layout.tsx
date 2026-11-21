@@ -59,6 +59,4 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <Box component="main" sx={{ flexGrow: 1, p: 3, mt: '64px', ml: { md: '280px' }, minHeight: '100vh' }}>{children}</Box>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose} transformOrigin={{ horizontal: 'right', vertical: 'top' }} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}><MenuItem onClick={handleLogout}><Logout fontSize="small" /> Cerrar sesión</MenuItem></Menu>
     </Box>
-  );
-  );
-}
+  };
