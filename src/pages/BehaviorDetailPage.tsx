@@ -1,12 +1,16 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, IconButton, Card, CardContent, List, ListItem, ListItemText, ListItemAvatar, Divider, Chip, Avatar } from '@mui/material';
+import { Box, Typography, Button, IconButton, Card, CardContent, List, ListItem, ListItemText, ListItemAvatar, Divider, Chip, Avatar, IconButton } from '@mui/material';
 import { ArrowBack, Add, Psychology, ThumbUp, ThumbDown, Delete } from '@mui/icons-material';
 import { useStudents } from '../hooks';
 import { useBehavior } from '../hooks/useBehavior';
 import { BehaviorDialog } from '../components/BehaviorDialog';
-import { formatDate } from '../types';
+import { formatDate } from '../services';
 import type { Student, BehaviorRecord, BehaviorGradeResult } from '../types';
+
+function StatBox({ label, value, color }: { label: string; value: string | number; color: 'success' | 'error' | 'primary' }) {
+  return <Box sx={{ textAlign: 'center', minWidth: 80 }}><Typography variant="h6" fontWeight={700}>{value}</Typography><Typography variant="caption" color="text.secondary">{label}</Typography></Box>;
+}
 
 export function BehaviorDetailPage() {
   const { subjectId, studentId } = useParams<{ subjectId: string; studentId: string }>();
@@ -17,6 +21,9 @@ export function BehaviorDetailPage() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [deleteConfirm, setDeleteConfirm] = React.useState<BehaviorRecord | null>(null);
   const grade = getStudentGrade(studentId || '');
+
+  // Extract ternary logic to variables to avoid JSX parsing issues
+  const pointsLabel = grade && grade.totalPoints > 0 ? '+' + grade.totalPoints : (grade ? String(grade.totalPoints) : '0');
 
   if (!student) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}><Typography>Alumno no encontrado</Typography></Box>;
 
@@ -38,7 +45,7 @@ export function BehaviorDetailPage() {
             <Box sx={{ display: 'flex', gap: 2 }}>
               <StatBox label="Positivos" value={grade.positiveCount} color="success" />
               <StatBox label="Negativos" value={grade.negativeCount} color="error" />
-              <StatBox label="Puntos" value={grade.totalPoints > 0 ? `+${grade.totalPoints}` : grade.totalPoints} color="primary" />
+              <StatBox label="Puntos" value={pointsLabel} color="primary" />
             </Box>
           </Box>
         ) : <Typography color="text.secondary">Sin registros</Typography>}
@@ -48,34 +55,32 @@ export function BehaviorDetailPage() {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
           <Typography variant="h6">Historial ({records.length})</Typography>
         </Box>
-        {records.length === 0 ? <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center', display: 'block' }}>Sin registros</Typography> : (
+        {records.length === 0 ? (
+          <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center', display: 'block' }}>Sin registros</Typography>
+        ) : (
           <List disablePadding>
             {records.map((record, index) => {
               const points = record.points ?? 0;
-              const pointsLabel = points > 0 ? '+' + points : String(points);
+              const recordPointsLabel = points > 0 ? '+' + points : String(points);
               return (
               <React.Fragment key={record.id}>
-                <ListItem sx={{ px: 2, py: 1, cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }} onClick={() => setDeleteConfirm(record)} secondaryAction={<IconButton edge="end" onClick={e => { e.stopPropagation(); setDeleteConfirm(record); }}><Delete color="error" /></IconButton>}>
+                <ListItem sx={{ px: 2, py: 1, cursor: 'pointer', hover: { bgcolor: 'action.hover' } }} onClick={() => setDeleteConfirm(record)} secondaryAction={<IconButton edge="end" onClick={e => { e.stopPropagation(); setDeleteConfirm(record); }}><Delete color="error" /></IconButton>}>
                   <ListItemAvatar>
                     <Avatar sx={{ width: 36, height: 36, bgcolor: record.type === 'positive' ? 'success.light' : 'error.light' }}>
                       {record.type === 'positive' ? <ThumbUp fontSize="small" color="success.main" /> : <ThumbDown fontSize="small" color="error.main" />}
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={<Typography variant="subtitle1" fontWeight={600}>{record.category}</Typography)} secondary={<Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 0.5 }}><Chip label={record.type === 'positive' ? '✓ Positivo' : '✗ Negativo'} size="small" color={record.type === 'positive' ? 'success' : 'error'} variant="outlined" /><Chip label={pointsLabel} size="small" variant="outlined" /><Typography variant="caption" color="text.secondary">{formatDate(record.date)}</Typography></Box>} />
+                  <ListItemText primary={<Typography variant="subtitle1" fontWeight={600}>{record.category}</Typography>} secondary={<Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 0.5 }}><Chip label={record.type === 'positive' ? '✓ Positivo' : '✗ Negativo'} size="small" color={record.type === 'positive' ? 'success' : 'error'} variant="outlined" /><Chip label={recordPointsLabel} size="small" variant="outlined" /><Typography variant="caption" color="text.secondary">{formatDate(record.date)}</Typography></Box>} />
                 </ListItem>
                 {index < records.length - 1 && <Divider variant="inset" component="li" />}
               </React.Fragment>
-            ))}
+              )
+            })}
           </List>
         )}
-      </CardContent></Card>
-
       <BehaviorDialog open={dialogOpen} onClose={() => setDialogOpen(false)} subjectId={subjectId!} students={[student]} categories={[]} onSave={add} />
+      </CardContent></Card>
       {deleteConfirm && <Box sx={{ mt: 2, p: 2, bgcolor: 'warning.light', borderRadius: 2, display: 'flex', justifyContent: 'space-between' }}><Typography>¿Eliminar "{deleteConfirm.category}" ({deleteConfirm.type === 'positive' ? '+' : ''}{deleteConfirm.points} pts)?</Typography><Button variant="contained" onClick={() => { remove(deleteConfirm.id); setDeleteConfirm(null); }}>Eliminar</Button></Box>}
     </Box>
   );
-}
-
-function StatBox({ label, value, color }: { label: string; value: string | number; color: 'success' | 'error' | 'primary' }) {
-  return <Box sx={{ textAlign: 'center', minWidth: 80 }}><Typography variant="h6" fontWeight={700}>{value}</Typography><Typography variant="caption" color="text.secondary">{label}</Typography></Box>;
 }

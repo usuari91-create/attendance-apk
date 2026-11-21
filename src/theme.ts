@@ -1,7 +1,4 @@
 import { createTheme, PaletteMode } from '@mui/material';
-import { Inter } from 'next/font/google';
-
-const inter = Inter({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
 
 export const getTheme = (mode: PaletteMode) =>
   createTheme({
@@ -17,7 +14,7 @@ export const getTheme = (mode: PaletteMode) =>
       divider: mode === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'
     },
     typography: {
-      fontFamily: inter.style.fontFamily,
+      fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
       h1: { fontWeight: 700, fontSize: '2.5rem' },
       h2: { fontWeight: 600, fontSize: '2rem' },
       h3: { fontWeight: 600, fontSize: '1.75rem' },

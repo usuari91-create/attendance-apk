@@ -5,7 +5,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import type { AttendanceRecord } from '../types';
-import { ATTENDANCE_STATUS, formatDate, getStartOfDay } from '../types';
+import { ATTENDANCE_STATUS } from '../types';
+import { getStartOfDay, formatDate } from '../services';
 import { useAttendance } from '../hooks';
 
 interface AttendanceDialogProps {

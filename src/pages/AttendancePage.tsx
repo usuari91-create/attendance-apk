@@ -8,7 +8,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useStudents } from '../hooks';
 import { useAttendance } from '../hooks/useAttendance';
 import { exportAttendanceToExcel, exportAttendanceToPDF } from '../utils/export';
-import { ATTENDANCE_STATUS, formatDate, getStartOfDay } from '../types';
+import { ATTENDANCE_STATUS } from '../types';
+import { getStartOfDay, formatDate } from '../services';
 import type { Student, AttendanceRecord } from '../types';
 
 export function AttendancePage() {

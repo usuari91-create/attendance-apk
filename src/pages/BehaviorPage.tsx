@@ -47,7 +47,7 @@ export function BehaviorPage() {
           {students.map((student, index) => {
             const grade = getStudentGrade(student.id);
             const totalPoints = grade?.totalPoints ?? 0;
-            const pointsLabel = totalPoints > 0 ? '+' + totalPoints : String(totalPoints);
+            const pointsLabel = (totalPoints > 0) ? '+' + totalPoints : String(totalPoints);
             const avatarBg = grade 
               ? (grade.finalGrade >= 7 ? 'success.main' : grade.finalGrade >= 5 ? 'warning.main' : 'error.main')
               : 'default.main';

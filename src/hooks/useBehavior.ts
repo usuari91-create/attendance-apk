@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { subscribeBehaviorRecords, getBehaviorRecords, createBehaviorRecord, updateBehaviorRecord, deleteBehaviorRecord, calculateAllBehaviorGrades, type BehaviorRecord, type BehaviorGradeResult, BEHAVIOR_CATEGORIES } from '../services';
+import { subscribeBehaviorRecords, getBehaviorRecords, createBehaviorRecord, updateBehaviorRecord, deleteBehaviorRecord, calculateAllBehaviorGrades, type BehaviorRecord, type BehaviorGradeResult } from '../services';
+import { BEHAVIOR_CATEGORIES } from '../types';
 
 export function useBehavior(subjectId: string | null, studentId?: string) {
   const [records, setRecords] = useState<BehaviorRecord[]>([]);
